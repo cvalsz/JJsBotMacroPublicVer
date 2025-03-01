@@ -22,7 +22,7 @@ The macro will start automating the jumping jacks for you. You can stop the macr
 ## Features:
 
 **Customizable Jacks per Second:**
-**Control how fast your jumping jacks are performed (e.g., 1 jack every 0.5 seconds).
+Control how fast your jumping jacks are performed (e.g., 1 jack every 0.5 seconds).
 
 **Customizable Letters per Second:**
 Set how fast letters are typed for special jacks (Death and Hell jacks only) to mimic chat speed (e.g., 1 letter per second).
