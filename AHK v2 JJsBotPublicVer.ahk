@@ -130,7 +130,15 @@ Loop, % numJacks
 {
     ; Check if Esc was pressed, and exit the loop if true
     if (escPressed)
-        break
+    {
+        Send, {Enter}  ; Make sure to add a newline before sending "Task done"
+        Sleep, 200
+        Send, % chatPrefix " Task done, " addressedAs
+        Send, {Enter}
+        Sleep, 200  ; Small delay before pressing space
+        Send, {Space}  ; Press Space after Enter
+        break  ; Exit the loop if Esc was pressed
+    }
 
     number := startNumber + A_Index - 1
     word := Number2Name(number)
@@ -142,7 +150,8 @@ Loop, % numJacks
     }
     else
     {
-        StringUpper, word, word  ; Make all uppercase for other jacks
+        word := CapitalizeFirstLetter(word)  ; Fix: Ensure only first letter is uppercase for non-Grammar Jacks
+        StringUpper, word, word  ; Now uppercase the entire word for non-grammar jacks
     }
 
     ; Determine correct prefix format
@@ -151,11 +160,12 @@ Loop, % numJacks
     else
         messagePrefix := chatPrefix . " " . word  ; Normal prefix with space
 
-    Sleep, 300  ; 25% slower typing speed
+    Sleep, 300  ; Add delay for typing speed
 
     if (jacksType = "Jumping Jacks")
     {
         Send, % messagePrefix
+        Sleep, 200  ; Delay before pressing Enter
         Send, {Enter}
         Sleep, 100  ; Small delay before pressing space
         Send, {Space}  ; Press Space after Enter
@@ -168,23 +178,26 @@ Loop, % numJacks
             letter := A_LoopField
             StringUpper, letter, letter
             Send, % chatPrefix " " letter
+            Sleep, 200  ; Delay before pressing Enter
             Send, {Enter}
             Sleep, 100  ; Small delay before pressing space
             Send, {Space}  ; Press Space after Enter for each letter
             Sleep, letterDelay
         }
         ; Ensure "Done" message appears only after all jacks
-        Send, {Enter}  ; Make sure to add a new line for final message
-        Sleep, 100
+        Sleep, 200
+        Send, {Enter}  ; Ensure a newline before sending "Done"
+        Sleep, 200
         Send, % chatPrefix " Done, " addressedAs
         Send, {Enter}
-        Sleep, 100  ; Small delay before pressing space
+        Sleep, 200  ; Small delay before pressing space
         Send, {Space}  ; Press Space after Enter
         Sleep, jackDelay
     }
     else if (jacksType = "Grammar Jacks")
     {
         Send, % chatPrefix " " word
+        Sleep, 200  ; Delay before pressing Enter
         Send, {Enter}
         Sleep, 100  ; Small delay before pressing space
         Send, {Space}  ; Press Space after Enter
@@ -198,29 +211,36 @@ Loop, % numJacks
             letter := A_LoopField
             StringUpper, letter, letter
             Send, % chatPrefix " " letter
+            Sleep, 200  ; Delay before pressing Enter
             Send, {Enter}
             Sleep, 100  ; Small delay before pressing space
             Send, {Space}  ; Press Space after Enter for each letter
             Sleep, letterDelay
         }
+        Sleep, 200
         Send, {Enter}  ; Ensure a newline before sending "Done"
-        Sleep, 100
+        Sleep, 200
         Send, % chatPrefix " Done, " addressedAs
         Send, {Enter}
-        Sleep, 100  ; Small delay before pressing space
+        Sleep, 200  ; Small delay before pressing space
         Send, {Space}  ; Press Space after Enter
         Sleep, jackDelay
     }
 }
 
-Sleep, 2000  ; Wait 2 seconds before showing the final GUI
+; Only show "Task done" GUI if all jacks are completed (and Esc wasn't pressed)
+if (!escPressed)  ; If Esc was not pressed
+{
+    Sleep, 2000  ; Wait 2 seconds before showing the final GUI
 
-; Show "Task done" GUI
-Gui, New, , Task Completed
-Gui, Add, Text,, Task done.
-Gui, Add, Button, gExitScript, OK
-Gui, Add, Text,, Made by cvalsz  ; Add "Made by cvalsz" at the bottom of the final message
-Gui, Show
+    ; Show "Task done" GUI
+    Gui, New, , Task Completed
+    Gui, Add, Text,, Task done.
+    Gui, Add, Button, gExitScript, OK
+    Gui, Add, Text,, Made by cvalsz  ; Add "Made by cvalsz" at the bottom of the final message
+    Gui, Show
+}
+
 return
 
 ExitScript:
