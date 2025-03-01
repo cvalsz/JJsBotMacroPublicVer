@@ -42,7 +42,7 @@ Number2Name(Number)
         {
             String .= TensArray[Tens - 1]
             if Ones
-                String .= "-" . OnesArray[Ones] . " "
+                String .= " " . OnesArray[Ones] . " "  ; Use space instead of hyphen
         }
         else if Tens
             String .= TeensArray[Period - Hundreds * 100 - 9] . " "
@@ -128,6 +128,10 @@ Sleep, 3000  ; Wait before starting
 
 Loop, % numJacks
 {
+    ; Check if Esc was pressed, and exit the loop if true
+    if (escPressed)
+        break
+
     number := startNumber + A_Index - 1
     word := Number2Name(number)
 
@@ -222,3 +226,8 @@ return
 ExitScript:
 Gui, Destroy
 ExitApp
+
+; Esc key to stop the script and set a flag
+Esc::
+escPressed := true
+return
