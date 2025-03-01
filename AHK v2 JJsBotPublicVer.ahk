@@ -1,4 +1,4 @@
-﻿; Function to reverse a string manually
+; Function to reverse a string manually
 ReverseString(str)
 {
     reversed := ""
@@ -169,7 +169,10 @@ Loop, % numJacks
             Send, {Space}  ; Press Space after Enter for each letter
             Sleep, letterDelay
         }
-        Send, % chatPrefix " " word
+        ; Ensure "Done" message appears only after all jacks
+        Send, {Enter}  ; Make sure to add a new line for final message
+        Sleep, 100
+        Send, % chatPrefix " Done, " addressedAs
         Send, {Enter}
         Sleep, 100  ; Small delay before pressing space
         Send, {Space}  ; Press Space after Enter
@@ -196,18 +199,15 @@ Loop, % numJacks
             Send, {Space}  ; Press Space after Enter for each letter
             Sleep, letterDelay
         }
-        Send, % chatPrefix " " ReverseWord
+        Send, {Enter}  ; Ensure a newline before sending "Done"
+        Sleep, 100
+        Send, % chatPrefix " Done, " addressedAs
         Send, {Enter}
         Sleep, 100  ; Small delay before pressing space
         Send, {Space}  ; Press Space after Enter
         Sleep, jackDelay
     }
 }
-
-Send, % chatPrefix " Done, " addressedAs
-Send, {Enter}
-Sleep, 100  ; Small delay before pressing space
-Send, {Space}  ; Final jump
 
 Sleep, 2000  ; Wait 2 seconds before showing the final GUI
 
